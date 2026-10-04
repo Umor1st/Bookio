@@ -1,0 +1,52 @@
+# Gradle
+.gradle/
+.kotlin/
+**/build/
+
+# Android Studio / IntelliJ IDEA
+.idea/
+*.iml
+out/
+
+# Local Android SDK configuration
+local.properties
+
+# Android build artifacts
+/captures/
+/.externalNativeBuild/
+/.cxx/
+
+# APK and Android App Bundle files
+*.apk
+*.aab
+
+# Signing keys and sensitive configuration
+*.jks
+*.keystore
+keystore.properties
+secrets.properties
+
+# Environment files and local secrets
+.env
+.env.*
+!.env.example
+
+# Operating system
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Logs and crash dumps
+*.log
+*.hprof
+hs_err_pid*
+replay_pid*
+
+# Temporary files
+*.tmp
+*.swp
+*.bak
+*~
+
+# Generated files
+gen/
