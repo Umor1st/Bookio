@@ -13,6 +13,8 @@ import ru.bookio.bookio.domain.repository.AuthError
 import ru.bookio.bookio.domain.repository.AuthRepository
 import ru.bookio.bookio.domain.repository.AuthResult
 import ru.bookio.bookio.domain.repository.LoginParams
+import ru.bookio.bookio.domain.repository.LogoutResult
+import ru.bookio.bookio.domain.repository.RestoreSessionResult
 import ru.bookio.bookio.domain.repository.RegisterStudentParams
 
 class FakeAuthRepository(
@@ -53,7 +55,13 @@ class FakeAuthRepository(
     }
 
     override fun currentSession(): AuthSession? = mutableSession.value
-    override fun logout() { mutableSession.value = null }
+    override suspend fun restoreSession(): RestoreSessionResult =
+        currentSession()?.let { RestoreSessionResult.Restored(it) } ?: RestoreSessionResult.NoSession
+
+    override suspend fun logout(): LogoutResult {
+        mutableSession.value = null
+        return LogoutResult.SUCCESS
+    }
 
     private fun createSession(user: User): AuthResult {
         val session = AuthSession("fake-token-${user.id}", issuedAt + 30.days, user)

@@ -9,6 +9,8 @@ import ru.bookio.bookio.domain.model.UserRole
 import ru.bookio.bookio.domain.repository.AuthError
 import ru.bookio.bookio.domain.repository.AuthResult
 import ru.bookio.bookio.domain.repository.LoginParams
+import ru.bookio.bookio.domain.repository.LogoutResult
+import ru.bookio.bookio.domain.repository.RestoreSessionResult
 import ru.bookio.bookio.domain.repository.RegisterStudentParams
 
 class FakeAuthRepositoryTest {
@@ -52,9 +54,18 @@ class FakeAuthRepositoryTest {
         val observed = repository.session
         val session = success(login("student"))
         assertEquals(session, observed.value)
-        repository.logout()
+        assertEquals(LogoutResult.SUCCESS, AuthDependencies(repository).logout())
         assertNull(repository.currentSession())
         assertNull(observed.value)
+    }
+
+    @Test fun restoreReflectsFakeSessionThroughUseCase() = runBlocking {
+        val auth = AuthDependencies(repository)
+        assertEquals(RestoreSessionResult.NoSession, auth.restoreSession())
+        val session = success(login("student"))
+        assertEquals(RestoreSessionResult.Restored(session), auth.restoreSession())
+        auth.logout()
+        assertEquals(RestoreSessionResult.NoSession, auth.restoreSession())
     }
 
     @Test fun librarianHasNoClass() = runBlocking {

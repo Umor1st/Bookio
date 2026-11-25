@@ -21,4 +21,6 @@ data class AuthSession(
     val accessToken: String,
     val expiresAt: Instant,
     val user: User,
-)
+) {
+    override fun toString(): String = "AuthSession(expiresAt=$expiresAt)"
+}

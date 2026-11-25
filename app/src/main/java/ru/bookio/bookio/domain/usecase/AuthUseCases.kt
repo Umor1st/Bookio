@@ -13,7 +13,11 @@ class Login(private val repository: AuthRepository) {
 }
 
 class Logout(private val repository: AuthRepository) {
-    operator fun invoke() = repository.logout()
+    suspend operator fun invoke() = repository.logout()
+}
+
+class RestoreSession(private val repository: AuthRepository) {
+    suspend operator fun invoke() = repository.restoreSession()
 }
 
 class GetCurrentSession(private val repository: AuthRepository) {
