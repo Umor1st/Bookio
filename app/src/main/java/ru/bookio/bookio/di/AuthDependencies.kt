@@ -6,11 +6,13 @@ import ru.bookio.bookio.domain.usecase.Login
 import ru.bookio.bookio.domain.usecase.Logout
 import ru.bookio.bookio.domain.usecase.ObserveAuthSession
 import ru.bookio.bookio.domain.usecase.RegisterStudent
+import ru.bookio.bookio.domain.usecase.RestoreSession
 
 class AuthDependencies(repository: AuthRepository = FakeAuthRepository()) {
     val registerStudent = RegisterStudent(repository)
     val login = Login(repository)
     val logout = Logout(repository)
     val getCurrentSession = GetCurrentSession(repository)
+    val restoreSession = RestoreSession(repository)
     val observeAuthSession = ObserveAuthSession(repository)
 }

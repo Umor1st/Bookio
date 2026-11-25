@@ -20,6 +20,14 @@ sealed interface AuthResult {
     data class Failure(val error: AuthError) : AuthResult
 }
 
+sealed interface RestoreSessionResult {
+    data class Restored(val session: AuthSession) : RestoreSessionResult
+    data object NoSession : RestoreSessionResult
+    data object RetryableFailure : RestoreSessionResult
+}
+
+enum class LogoutResult { SUCCESS, LOCAL_STORAGE_FAILURE }
+
 enum class AuthError {
     INVALID_DATA, LOGIN_ALREADY_EXISTS, INVALID_CREDENTIALS, TEMPORARY_FAILURE, UNKNOWN
 }
@@ -29,5 +37,10 @@ interface AuthRepository {
     suspend fun registerStudent(params: RegisterStudentParams): AuthResult
     suspend fun login(params: LoginParams): AuthResult
     fun currentSession(): AuthSession?
-    fun logout()
+
+    /** Await this before using a null [session] value to route to sign-in. */
+    suspend fun restoreSession(): RestoreSessionResult
+
+    /** Success confirms local removal. Server revocation is best effort. */
+    suspend fun logout(): LogoutResult
 }
